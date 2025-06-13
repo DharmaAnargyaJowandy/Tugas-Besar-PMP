@@ -70,7 +70,7 @@ static int hapus_dokter(Node** head, Node** tail, int id) {
 }
 
 static void tampil_semua_dokter(Node* head) {
-    printf("\n--- Daftar Semua Data Dokter ---\n");
+    printf("\nDaftar Semua Data Dokter \n");
     if (head == NULL) {
         printf("Tidak ada data dokter untuk ditampilkan.\n");
         return;
@@ -92,4 +92,4 @@ static void tampil_semua_dokter(Node* head) {
     }
 }
 
-#endif // DOKTER_LIBRARY_H
+#endif
