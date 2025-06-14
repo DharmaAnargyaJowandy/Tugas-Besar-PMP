@@ -6,7 +6,7 @@
 #define MAX_LINE 256
 
 // Struct untuk data dokter
-typedef struct data_dokter {
+typedef struct data_dokter{
     int ID;
     char name[50];
     int maxShiftsPerWeek;
@@ -18,7 +18,7 @@ typedef struct data_dokter {
 } DataDokter;
 
 // Fungsi untuk membaca CSV dan membuat linked list
-DataDokter* load_dokter_dari_csv() {
+DataDokter* load_dokter_dari_csv(){
     FILE *file = fopen(FILENAME, "r");
     if (!file) {
         perror("Gagal membuka file CSV");
@@ -29,8 +29,8 @@ DataDokter* load_dokter_dari_csv() {
     DataDokter *head = NULL, *tail = NULL;
     fgets(line, sizeof(line), file); // Lewati header
 
-    while (fgets(line, sizeof(line), file)) {
-        DataDokter *newNode = (DataDokter *)malloc(sizeof(DataDokter));
+    while (fgets(line, sizeof(line), file)){
+        DataDokter *newNode = (DataDokter*)malloc(sizeof(DataDokter));
         if (!newNode) continue;
         line[strcspn(line, "\n")] = '\0';
         char *token = strtok(line, ",");
@@ -58,7 +58,7 @@ DataDokter* load_dokter_dari_csv() {
 }
 
 // Fungsi menyimpan linked list ke CSV
-void simpan_dokter_ke_csv(DataDokter *head) {
+void simpan_dokter_ke_csv(DataDokter *head){
     FILE *file = fopen(FILENAME, "w");
     if (!file) {
         perror("Gagal membuka file untuk menulis");
@@ -67,7 +67,7 @@ void simpan_dokter_ke_csv(DataDokter *head) {
 
     fprintf(file, "Nama,ID,MaxShiftPerWeek,Pagi,Siang,Malam,RestDay\n");
     DataDokter *curr = head;
-    while (curr) {
+    while (curr){
         fprintf(file, "%s,%03d,%d,%d,%d,%d,%d\n", curr->name, curr->ID, curr->maxShiftsPerWeek,
                 curr->prefersShift[0], curr->prefersShift[1], curr->prefersShift[2], curr->restDay);
         curr = curr->next;
@@ -77,7 +77,7 @@ void simpan_dokter_ke_csv(DataDokter *head) {
 }
 
 // Fungsi menampilkan seluruh data dokter
-void tampilkan_dokter(DataDokter *head) {
+void tampilkan_dokter(DataDokter *head){
     while (head) {
         printf("ID: %03d | Nama: %s | Max/Minggu: %d | Pref: %d-%d-%d | Cuti: %d\n",
                head->ID, head->name, head->maxShiftsPerWeek,
@@ -87,7 +87,7 @@ void tampilkan_dokter(DataDokter *head) {
 }
 
 // Fungsi menambahkan data dokter ke akhir linked list
-void tambah_dokter(DataDokter **head_ref) {
+void tambah_dokter(DataDokter **head_ref){
     DataDokter *newNode = (DataDokter *)malloc(sizeof(DataDokter));
     printf("Masukkan nama: ");
     scanf("%s", newNode->name);
@@ -108,7 +108,7 @@ void tambah_dokter(DataDokter **head_ref) {
     for (int i = 0; i < 5; i++) newNode->assignedShiftsPerWeek[i] = 0;
 
     newNode->next = NULL;
-    if (!*head_ref) {
+    if (!*head_ref){
         newNode->prev = NULL;
         *head_ref = newNode;
         return;
@@ -121,7 +121,7 @@ void tambah_dokter(DataDokter **head_ref) {
 }
 
 // Fungsi menghapus dokter berdasarkan ID
-void hapus_dokter(DataDokter **head_ref, int targetID) {
+void hapus_dokter(DataDokter **head_ref, int targetID){
     DataDokter *curr = *head_ref;
     while (curr && curr->ID != targetID) curr = curr->next;
     if (!curr) {
@@ -138,11 +138,11 @@ void hapus_dokter(DataDokter **head_ref, int targetID) {
 }
 
 // Menu utama
-int main() {
+int main(){
     DataDokter *head = load_dokter_dari_csv();
     int pilihan, id;
 
-    do {
+    do{
         printf("\n=== Menu Dokter ===\n");
         printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Simpan dan keluar\nPilih: ");
         scanf("%d", &pilihan);
