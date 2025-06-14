@@ -6,7 +6,7 @@ void clear_input_buffer() {
 }
 
 void tampilkan_menu() {
-    printf("\n--- MENU MANAJEMEN DOKTER ---\n");
+    printf("\nMENU MANAJEMEN DOKTER\n");
     printf("1. Tambah Data Dokter Baru\n");
     printf("2. Hapus Data Dokter\n");
     printf("3. Tampilkan Semua Dokter\n");
