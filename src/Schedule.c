@@ -28,7 +28,8 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
 
         while (temp != NULL)
         {
-            if((temp ->prefersShift[slot -> shift] == 1) && ((temp->assignedShiftsPerWeek[week]) < (temp->maxShiftsPerWeek))){
+            if((temp ->prefersShift[slot -> shift] == 1) && ((temp->assignedShiftsPerWeek[week]) < (temp->maxShiftsPerWeek))
+                && check_assigned_status(temp ->ID,slots, i) && (slot -> date.date != temp ->restDay)){
                 if(temp -> assignedShiftsPerWeek[week] < minshift){
                     choosen_doctor_ptr = temp;
                     minshift = temp -> assignedShiftsPerWeek[week];
@@ -46,6 +47,32 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
             choosen_doctor_ptr->totalAssignedShifts++;
         }
     }
+}
+
+int check_assigned_status(int doctor_ID, struct shift_slot *Slots, int current_index){
+    struct shift_slot *temp1 = &Slots[current_index];
+    int current_day = temp1 ->date.date;
+    ShiftType current_shift = temp1 -> shift;
+
+    for(int i = 0; i < current_index; i++){
+
+        struct shift_slot *temp2 = &Slots[i];
+        int prev_day = temp2 -> date.date;
+        ShiftType prev_shift = temp2 -> shift;
+
+        if (prev_day == current_day || (prev_day == current_day - 1 && prev_shift == MALAM &&  current_shift == PAGI))
+        {
+            for(int j = 0; j < temp2 ->assigned_amount; j++){
+                if (temp2 ->assigned_doctor_ID[j] == doctor_ID)
+                {
+                    return 0;
+                }
+                
+            }
+        }
+        
+    }
+    return 1;
 }
 
 void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
