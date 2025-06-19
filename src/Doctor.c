@@ -66,9 +66,9 @@ void simpan_dokter_ke_csv(struct Doctor_data *head){
 // Fungsi menampilkan seluruh data dokter
 void tampilkan_dokter(struct Doctor_data *head){
     while (head) {
-        printf("ID: %03d | Nama: %s | Max/Minggu: %d | Pref: %d-%d-%d | Cuti: %d\n",
+        printf("ID: %03d | Nama: %s | Max/Minggu: %d | Pref: %d-%d-%d | Cuti: %d | total shift : %d\n",
                head->ID, head->name, head->maxShiftsPerWeek,
-               head->prefersShift[0], head->prefersShift[1], head->prefersShift[2], head->restDay);
+               head->prefersShift[0], head->prefersShift[1], head->prefersShift[2], head->restDay, head ->totalAssignedShifts);
         head = head->next;
     }
 }
