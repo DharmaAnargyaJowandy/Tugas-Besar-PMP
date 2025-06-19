@@ -6,6 +6,7 @@
 #include "Schedule.h"
 
 
+
 int main(){
     struct Doctor_data *head = load_dokter_dari_csv();
     int pilihan, id;
@@ -16,7 +17,6 @@ int main(){
         printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat dan Menampilkan Jadwal\n5. Simpan dan keluar\nPilih: ");
         scanf("%d", &pilihan);
 
-        system("cls");
 
         switch (pilihan) {
             case 1:
@@ -34,6 +34,7 @@ int main(){
                 generate_schedule(slot);
                 assign_doctor(slot, head);
                 print_schedule(slot, head);
+                print_unassigned(head);
                 break;
             case 5:
                 simpan_dokter_ke_csv(head);
