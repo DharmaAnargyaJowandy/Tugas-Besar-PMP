@@ -21,32 +21,48 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
         struct shift_slot *slot = &slots[i];
         int week = (slot -> date.date) / 7;
 
-        int choosen_Doctor = -1;
-        int minshift = max;
-        struct Doctor_data *choosen_doctor_ptr = NULL;
-        struct Doctor_data *temp = front;
 
-        while (temp != NULL)
-        {
-            if((temp ->prefersShift[slot -> shift] == 1) && ((temp->assignedShiftsPerWeek[week]) < (temp->maxShiftsPerWeek))
-                && check_assigned_status(temp ->ID,slots, i) && (slot -> date.date != temp ->restDay)){
-                if(temp -> assignedShiftsPerWeek[week] < minshift){
-                    choosen_doctor_ptr = temp;
-                    minshift = temp -> assignedShiftsPerWeek[week];
-                    break;
+        for( int amount = 0; amount < 4; amount++){
+            int minshift = max;
+            struct Doctor_data *choosen_doctor_ptr = NULL;
+            struct Doctor_data *temp = front;
+
+            while (temp != NULL)
+            {
+                if((temp ->prefersShift[slot -> shift] == 1) 
+                    && ((temp->assignedShiftsPerWeek[week]) < (temp->maxShiftsPerWeek))
+                    && check_assigned_status(temp ->ID,slots, i) 
+                    && (slot -> date.date != temp ->restDay)
+                    &&(!prevent_duplicate(temp->ID, slot))){
+                    if(temp -> assignedShiftsPerWeek[week] < minshift){
+                        choosen_doctor_ptr = temp;
+                        minshift = temp -> assignedShiftsPerWeek[week];
+                    }
                 }
+
+                temp = temp -> next;
             }
 
-            temp = temp -> next;
-        }
-
-        if(choosen_doctor_ptr != NULL){
-            slot->assigned_doctor_ID[0] = choosen_doctor_ptr->ID;
-            slot->assigned_amount = 1;
-            choosen_doctor_ptr->assignedShiftsPerWeek[week]++;
-            choosen_doctor_ptr->totalAssignedShifts++;
+            if(choosen_doctor_ptr != NULL){
+                slot->assigned_doctor_ID[slot->assigned_amount] = choosen_doctor_ptr->ID;
+                choosen_doctor_ptr->assignedShiftsPerWeek[week]++;
+                choosen_doctor_ptr->totalAssignedShifts++;
+                slot->assigned_amount ++;
+            }
+            else{
+                break;
+            }
         }
     }
+}
+
+int prevent_duplicate(int doctor_ID, struct shift_slot *Slots){
+    for(int i = 0; i < Slots ->assigned_amount; i ++){
+        if(doctor_ID == Slots ->assigned_doctor_ID[i]){
+            return 1;
+        }
+    }
+    return 0;
 }
 
 int check_assigned_status(int doctor_ID, struct shift_slot *Slots, int current_index){
@@ -106,4 +122,27 @@ void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
         }
     }
 
+}
+
+void print_unassigned (struct Doctor_data * front){
+
+    printf("\n");
+    printf("Daftar dokter yang belum mendapat jadwal \n");
+    struct Doctor_data *temp = front;
+    int count = 0;
+
+    while (temp)
+    {
+        if(temp ->totalAssignedShifts == 0){
+            count++;
+            printf("Dr. %s \n", temp->name);
+           
+        }
+
+        temp = temp -> next;
+    }
+
+    if(count == 0){
+        printf("semua dokter telah mendapatkan jadwal \n");
+    }
 }
