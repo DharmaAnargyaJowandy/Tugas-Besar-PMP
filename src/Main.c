@@ -14,7 +14,7 @@ int main(){
 
     do{
         printf("\n=== Menu Dokter ===\n");
-        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat dan Menampilkan Jadwal\n5. Simpan dan keluar\nPilih: ");
+        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat dan Menampilkan Jadwal\n5. Tampilkan Statistik\n6. Simpan dan keluar\nPilih: ");
         scanf("%d", &pilihan);
 
 
@@ -37,13 +37,16 @@ int main(){
                 print_unassigned(head);
                 break;
             case 5:
+                statistik(head);
+                break;
+            case 6:
                 simpan_dokter_ke_csv(head);
                 printf("Data disimpan. Keluar...\n");
                 break;
             default:
                 printf("Pilihan tidak valid.\n");
         }
-    } while (pilihan != 5);
+    } while (pilihan != 6);
 
     return 0;
 }

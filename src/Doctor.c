@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "Doctor.h"
 #include "common.h"
 
@@ -122,5 +123,56 @@ void hapus_dokter(struct Doctor_data **head_ref, int targetID){
 
     free(curr);
     printf("Dokter dengan ID %d telah dihapus.\n", targetID);
+}
+
+void statistik(struct Doctor_data *front){
+
+    int min_sft = max;
+    int max_sft = 0;
+    int count = 0;
+    double sum = 0.0;
+    double sum_squares = 0.0;
+
+    if (front == NULL) {
+        printf("Daftar dokter kosong, tidak ada statistik untuk ditampilkan.\n");
+        return;
+    }
+
+    struct Doctor_data *temp = front;
+
+    while (temp)
+    {
+        int total = temp -> totalAssignedShifts;
+
+        if(total > max_sft){
+            max_sft = total;
+        }
+
+        if(total < min_sft){
+            min_sft = total;
+        }
+
+        sum = sum + total;
+        sum_squares = sum_squares + (total * total);
+        count ++;
+
+        temp =  temp -> next;
+    }
+
+    int range = max_sft - min_sft;;
+
+    double average = sum/count;
+
+    double variance = (sum_squares/ count) - ( average * average);
+
+    double standard_deviation = sqrt(variance);
+
+    printf("Statistik Beban Kerja Dokter\n");
+    printf("Jumlah dokter         : %d\n", count);
+    printf("Total shift tertinggi : %d\n", max_sft);
+    printf("Total shift terendah  : %d\n", min_sft);
+    printf("Range                 : %d\n", range);
+    printf("Rata-rata Shift       : %.2f\n", average);
+    printf("Standard deviation    : %.2f\n", standard_deviation);
 }
 
