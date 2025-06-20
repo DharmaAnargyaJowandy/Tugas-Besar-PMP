@@ -178,3 +178,5 @@ void print_unassigned (struct Doctor_data * front){
         printf("semua dokter telah mendapatkan jadwal \n");
     }
 }
+
+
