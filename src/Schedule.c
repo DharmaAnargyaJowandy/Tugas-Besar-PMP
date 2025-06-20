@@ -4,16 +4,31 @@
 #include "common.h"
 #include "Schedule.h"
 
-void generate_schedule(struct shift_slot *slot){
+void generate_schedule(struct shift_slot *slot, struct Doctor_data *front ){
     int index = 0;
     for(int i = 1; i < 31; i++){
         for(int j = 0; j < 3; j++){
             slot[index].shift = j;
             slot[index].assigned_amount = 0;
             slot[index].date.date = i;
+            for (int k = 0; k < 4; k++) {
+                slot[index].assigned_doctor_ID[k] = 0; 
+            }
             index++;
         }
     }
+
+    struct Doctor_data *temp = front;
+    while (temp)
+    {
+        temp ->totalAssignedShifts = 0;
+        for(int i = 0; i< 5; i++){
+            temp ->assignedShiftsPerWeek[i] = 0;
+        }
+
+        temp = temp -> next;
+    }
+    
 }
 
 void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
@@ -178,5 +193,7 @@ void print_unassigned (struct Doctor_data * front){
         printf("semua dokter telah mendapatkan jadwal \n");
     }
 }
+
+
 
 
