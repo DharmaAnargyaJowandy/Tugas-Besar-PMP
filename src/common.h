@@ -17,7 +17,7 @@ struct shift_slot{
     struct Date date;
     ShiftType shift;
     int assigned_amount;
-    int assigned_doctor_ID[10];
+    int assigned_doctor_ID[4];
 };
 
 struct Doctor_data{
