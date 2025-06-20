@@ -17,6 +17,16 @@ void generate_schedule(struct shift_slot *slot){
 }
 
 void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
+
+
+    if (front == NULL){
+        printf("Daftar dokter kosong, tidak dapat melakukan penjadwalan \n");
+        return;
+    }
+
+    // pointer untuk melacak titik awal pencarian dokter 
+    struct Doctor_data *search_start = front;
+
     for(int i = 0; i < 90; i++){
         struct shift_slot *slot = &slots[i];
         int week = (slot -> date.date) / 7;
@@ -25,9 +35,20 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
         for( int amount = 0; amount < 4; amount++){
             int minshift = max;
             struct Doctor_data *choosen_doctor_ptr = NULL;
-            struct Doctor_data *temp = front;
+            struct Doctor_data *temp = search_start;
 
-            while (temp != NULL)
+            int count = 0; //agar tidak out of range
+            struct Doctor_data *counter_pointer = front;
+
+            //melakukan iterasi unutk melihat jumlah dokter dari titik awal 
+            while (counter_pointer)
+            {
+                count++;
+                counter_pointer = counter_pointer -> next;
+            }
+            
+            //iterasi sebanyak jumlah dokter dari titik pencarian
+            for(int j = 0; j < count; j++)
             {
                 if((temp ->prefersShift[slot -> shift] == 1) 
                     && ((temp->assignedShiftsPerWeek[week]) < (temp->maxShiftsPerWeek))
@@ -41,6 +62,11 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
                 }
 
                 temp = temp -> next;
+
+                //agar kembali ke head apabila telah mencapai akhir 
+                if(temp == NULL){
+                    temp = front;
+                }
             }
 
             if(choosen_doctor_ptr != NULL){
@@ -48,6 +74,12 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
                 choosen_doctor_ptr->assignedShiftsPerWeek[week]++;
                 choosen_doctor_ptr->totalAssignedShifts++;
                 slot->assigned_amount ++;
+
+                //update titik awal pencarian menjadi dokter berikutnya setelah dokter yang ditugaskan 
+                search_start = choosen_doctor_ptr->next;
+                if(search_start == NULL){
+                    search_start = front;
+                }
             }
             else{
                 break;
