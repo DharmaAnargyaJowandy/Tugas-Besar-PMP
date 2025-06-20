@@ -18,9 +18,10 @@ struct Doctor_data* load_dokter_dari_csv(){
     fgets(line, sizeof(line), file); // Lewati header
 
     while (fgets(line, sizeof(line), file)){
+        line[strcspn(line,"\r\n")] = '\0';
+        if (line[0] == '\0') continue;
         struct Doctor_data *newNode = (struct Doctor_data*)malloc(sizeof(struct Doctor_data));
         if (!newNode) continue;
-        line[strcspn(line, "\n")] = '\0';
         char *token = strtok(line, ",");
 
         strcpy(newNode->name, token);
