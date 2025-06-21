@@ -134,25 +134,37 @@ void tambah_dokter(struct Doctor_data **head_ref) {
         printf("Masukkan maksimal shift/minggu (maksimal 7): ");
         fgets(buffer, sizeof(buffer), stdin);
         if (sscanf(buffer, "%d", &newNode->maxShiftsPerWeek) != 1 || newNode->maxShiftsPerWeek < 1 || newNode->maxShiftsPerWeek > 7)
-            printf("Input tidak valid atau melebihi batas!");
+            printf("Input tidak valid atau melebihi batas!\n");
     } while (newNode->maxShiftsPerWeek < 1 || newNode->maxShiftsPerWeek > 7);
 
-    for (int i = 0; i < 3; i++) {
-        do {
-            if (i == 0)
-                printf("Preferensi shift pagi (0 atau 1): ");
-            else if (i == 1)
-                printf("Preferensi shift siang (0 atau 1): ");
-            else
-                printf("Preferensi shift malam (0 atau 1): ");
+    do {
+        valid = 1; // Diasumsikan valid, kecuali jika input 0-0-0
+        for (int i = 0; i < 3; i++) {
+            do {
+                if (i == 0)
+                    printf("Preferensi shift pagi (0 atau 1): ");
+                else if (i == 1)
+                    printf("Preferensi shift siang (0 atau 1): ");
+                else
+                    printf("Preferensi shift malam (0 atau 1): ");
 
-            fgets(buffer, sizeof(buffer), stdin);
-            if (sscanf(buffer, "%d", &newNode->prefersShift[i]) != 1 || (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1)) {
-                printf("Input tidak valid!\n");
-                newNode->prefersShift[i] = -1; // Meminta ulang
-            }
-        } while (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1);
-    }
+                fgets(buffer, sizeof(buffer), stdin);
+                if (sscanf(buffer, "%d", &newNode->prefersShift[i]) != 1 || 
+                    (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1)) {
+                    printf("Input tidak valid!\n");
+                    newNode->prefersShift[i] = -1;
+                }
+            } while (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1);
+        }
+
+        // Cek apakah semua preferensi adalah 0
+        if (newNode->prefersShift[0] == 0 && 
+            newNode->prefersShift[1] == 0 && 
+            newNode->prefersShift[2] == 0) {
+            printf("Minimal input shift 1 kali.\n");
+            valid = 0; // Input tidak valid, ulangi
+        }
+    } while (!valid);
 
     do {
         printf("Masukkan tanggal cuti (1-30): ");
