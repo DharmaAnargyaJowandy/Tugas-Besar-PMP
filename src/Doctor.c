@@ -185,12 +185,17 @@ void tambah_dokter(struct Doctor_data **head_ref) {
         }
     } while (!valid);
 
+    int tanggal_valid = 0;
     do {
         printf("Masukkan tanggal cuti (1-30, atau 0 jika tidak ada): ");
         fgets(buffer, sizeof(buffer), stdin);
-        if (sscanf(buffer, "%d", &newNode->restDay) != 1 || newNode->restDay < 0 || newNode->restDay > 30)
+        if (sscanf(buffer, "%d", &newNode->restDay) == 1 && newNode->restDay >= 0 && newNode->restDay <= 30){
+            tanggal_valid = 1;
+        }
+        else{
             printf("Tanggal tidak valid! Masukkan angka antara 0 dan 30.\n");
-    } while (newNode->restDay < 0 || newNode->restDay > 30); 
+        }
+    } while (!tanggal_valid); 
 
     newNode->totalAssignedShifts = 0;
     for (int i = 0; i < 5; i++) newNode->assignedShiftsPerWeek[i] = 0;
