@@ -18,8 +18,9 @@ int main(){
 
     do{
         printf("\n=== Menu Dokter ===\n");
-        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat dan Menampilkan Jadwal\n5. Tampilkan Statistik\n6. Simpan dan keluar\nPilih: ");
+        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat Jadwal\n5. Menampilkan Jadwal\n6. Tampilkan Statistik\n7. Simpan dan keluar\nPilih: ");
         scanf("%d", &pilihan);
+        printf("\n");
 
 
         switch (pilihan) {
@@ -34,76 +35,20 @@ int main(){
                 scanf("%d", &id);
                 hapus_dokter(&head, id);
                 break;
-            case 4: {
-                int pilihan_jadwal;
-                do {
-                    printf("\n--- Menu Tampilkan Jadwal ---\n");
-                    printf("1. Tampilkan Jadwal per Hari\n");
-                    printf("2. Tampilkan Jadwal per Minggu\n");
-                    printf("3. Tampilkan Jadwal per Bulan\n");
-                    printf("4. Kembali ke Menu Utama\n");
-
-                    if (!get_integer_input("Pilih: ", &pilihan_jadwal)) {
-                        pilihan_jadwal = 0; 
-                    }
-                    if (pilihan_jadwal >= 1 && pilihan_jadwal <= 3 && !jadwal_dibuat) {
-                        generate_schedule(slot, head);
-                        assign_doctor(slot, head);
-                        jadwal_dibuat = 1;
-                    }
-
-                    switch (pilihan_jadwal) {
-                        case 1: {
-                            int tanggal;
-                            while (1) { 
-                                if (get_integer_input("\nMasukkan tanggal (1-30 atau masukkan 0 untuk kembali): ", &tanggal)) {
-                                    if (tanggal == 0) {
-                                        break; 
-                                    }
-                                    if (tanggal >= 1 && tanggal <= 30) {
-                                        print_schedule_for_day(slot, head, tanggal);
-                                    } else {
-                                        printf("Tanggal tidak valid. Harap masukkan angka antara 1 dan 30.\n");
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                        case 2: {
-                            int minggu;
-                            while (1) {
-                                if (get_integer_input("\nMasukkan minggu (1-5) (atau masukkan 0 untuk kembali): ", &minggu)) {
-                                    if (minggu == 0) {
-                                        break; 
-                                    }
-                                    if (minggu >= 1 && minggu <= 5) {
-                                        print_schedule_for_week(slot, head, minggu);
-                                    } else {
-                                        printf("Minggu tidak valid. Harap masukkan angka antara 1 dan 5.\n");
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                        case 3:
-                            print_schedule(slot, head);
-                            print_unassigned(head);
-                            break;
-                        case 4:
-                            break; 
-                        default:
-                            printf("Pilihan tidak valid.\n");
-                            break;
-                    }
-                } while (pilihan_jadwal != 4); 
-                pilihan = 0; 
+            case 4:
+                generate_schedule(slot, head);
+                assign_doctor(slot, head);
+                fill_empty_shift(slot, head);
+                print_pelanggaran(head, slot);
+                print_unassigned(head);
                 break;
-            }
-              
             case 5:
-                statistik(head);
+                print_schedule(slot, head);
                 break;
             case 6:
+                statistik(head);
+                break;
+            case 7:
                 dokter_to_csv(head);
                 jadwal_to_csv(slot, head);
                 printf("Data disimpan. Keluar...\n");
@@ -111,7 +56,7 @@ int main(){
             default:
                 printf("Pilihan tidak valid.\n");
         }
-    } while (pilihan != 6);
+    } while (pilihan != 7);
 
     return 0;
 }
