@@ -211,8 +211,16 @@ void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
         for(int j = 0; j < slot[i].assigned_amount; j++){
             struct Doctor_data *temp = head;
             while (temp){
-                if(temp -> ID == slot[i].assigned_doctor_ID[j]){                        
-                    fprintf(point_file,"%s(%d)", temp -> name, temp -> ID );
+                if(temp -> ID == slot[i].assigned_doctor_ID[j]){ 
+                    if ((temp->ID)< 10){                      
+                        fprintf(point_file,"%s(00%d)", temp -> name, temp -> ID );
+                    }
+                    else if((temp->ID)< 100){
+                        fprintf(point_file,"%s(0%d)", temp -> name, temp -> ID );
+                    }
+                    else{
+                        fprintf(point_file,"%s(%d)", temp -> name, temp -> ID );
+                    }
                     if (j < slot[i].assigned_amount - 1){
                         fprintf(point_file, ",");
                     }
