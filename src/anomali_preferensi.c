@@ -33,7 +33,7 @@ void fill_empty_shift(struct shift_slot *slot, struct Doctor_data *head){
 
     }
     for(int j=1; j<5;j++){
-        printf("Jumlah pelanggaran preferensi pada minggu ke - %d: %d\n", j, pelanggaranPerweek[j]);
+        printf("Jumlah pelanggaran preferensi pada minggu ke - %d: %d\n\n", j, pelanggaranPerweek[j]);
     } 
 }
 
