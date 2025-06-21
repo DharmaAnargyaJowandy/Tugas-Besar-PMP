@@ -205,6 +205,9 @@ void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
     for(int i = 0 ; i <90 ; i++){
         const char *shiftNames[] = {"Pagi", "Siang", "Malam"};
         fprintf(point_file, "%d,%s,",slot[i].date.date,shiftNames[slot[i].shift]);
+        if (slot[i].assigned_amount==0){
+            fprintf(point_file, "Belum Dijadwalkan");
+        }
         for(int j = 0; j < slot[i].assigned_amount; j++){
             struct Doctor_data *temp = head;
             while (temp){
