@@ -47,7 +47,7 @@ struct Doctor_data* load_dokter_dari_csv(){
 }
 
 // Fungsi menyimpan linked list ke CSV
-void simpan_dokter_ke_csv(struct Doctor_data *head){
+void dokter_to_csv(struct Doctor_data *head){
     FILE *file = fopen(FILENAME, "w");
     if (!file) {
         perror("Gagal membuka file untuk menulis");
@@ -65,45 +65,113 @@ void simpan_dokter_ke_csv(struct Doctor_data *head){
     fclose(file);
 }
 
-// Fungsi menampilkan seluruh data dokter
-void tampilkan_dokter(struct Doctor_data *head){
-    while (head) {
-        printf("ID: %03d | Nama: %s | Max/Minggu: %d | Pref: %d-%d-%d | Cuti: %d | total shift : %d\n",
-               head->ID, head->name, head->maxShiftsPerWeek,
-               head->prefersShift[0], head->prefersShift[1], head->prefersShift[2], head->restDay, head ->totalAssignedShifts);
-        head = head->next;
+// Fungsi menampilkan seluruh data dokter (diurutkan berdasarkan ID)
+void tampilkan_dokter(DataDokter *head){
+    // Salin ke array pointer
+    int count = 0;
+    DataDokter *curr = head;
+    while (curr) {count++; curr = curr->next;}
+    DataDokter **array = malloc(sizeof(DataDokter*) * count);
+    curr = head;
+    for (int i = 0; i < count; i++){
+        array[i] = curr;
+        curr = curr->next;
     }
+    // Bubble sort by ID
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++){
+            if (array[j]->ID > array[j+1]->ID){
+                DataDokter *temp = array[j];
+                array[j] = array[j+1];
+                array[j+1] = temp;
+            }
+        }
+    }
+    // Cetak hasil
+    for (int i = 0; i < count; i++){
+        printf("ID: %03d | Nama: %s | Max Shift/Minggu: %d | Pref: %d-%d-%d | Tanggal Cuti: %d\n",
+               array[i]->ID, array[i]->name, array[i]->maxShiftsPerWeek,
+               array[i]->prefersShift[0], array[i]->prefersShift[1], array[i]->prefersShift[2], array[i]->restDay);
+    }
+    free(array);
 }
 
-// Fungsi menambahkan data dokter ke akhir linked list
-void tambah_dokter(struct Doctor_data **head_ref){
-    struct Doctor_data *newNode = (struct Doctor_data *)malloc(sizeof(struct Doctor_data));
+// Fungsi cek duplikat ID
+int cek_id_sama(DataDokter *head, int ID){
+    while (head){
+        if (head->ID == ID) return 1;
+        head = head->next;
+    }
+    return 0;
+}
+
+// Fungsi menambahkan data dokter
+void tambah_dokter(DataDokter **head_ref) {
+    DataDokter *newNode = (DataDokter *)malloc(sizeof(DataDokter));
+    char buffer[100];
+    getchar(); // bersihkan newline buffer
+
     printf("Masukkan nama: ");
-    scanf("%s", newNode->name);
-    printf("Masukkan ID (3 digit): ");
-    scanf("%d", &newNode->ID);
-    printf("Masukkan maksimal shift/minggu: ");
-    scanf("%d", &newNode->maxShiftsPerWeek);
-    printf("Preferensi shift pagi: ");
-    scanf("%d", &newNode->prefersShift[0]);
-    printf("Preferensi shift siang: ");
-    scanf("%d", &newNode->prefersShift[1]);
-    printf("Preferensi shift malam: ");
-    scanf("%d", &newNode->prefersShift[2]);
-    printf("Masukkan tanggal cuti (1-30): ");
-    scanf("%d", &newNode->restDay);
+    fgets(newNode->name, sizeof(newNode->name), stdin);
+    newNode->name[strcspn(newNode->name, "\n")] = '\0'; // hapus newline
+
+    int valid = 0;
+    do {
+        printf("Masukkan ID (3 digit): ");
+        fgets(buffer, sizeof(buffer), stdin);
+        if (sscanf(buffer, "%d", &newNode->ID) != 1 || newNode->ID < 1 || newNode->ID > 999) {
+            printf("Input tidak valid! Masukkan angka 3 digit (1–999).\n");
+            continue;
+        }
+        if (cek_id_sama(*head_ref, newNode->ID)) {
+            printf("ID sudah digunakan. Masukkan ID lain.\n");
+        } else {
+            valid = 1;
+        }
+    } while (!valid);
+
+    do {
+        printf("Masukkan maksimal shift/minggu (maksimal 7): ");
+        fgets(buffer, sizeof(buffer), stdin);
+        if (sscanf(buffer, "%d", &newNode->maxShiftsPerWeek) != 1 || newNode->maxShiftsPerWeek < 1 || newNode->maxShiftsPerWeek > 7)
+            printf("Input tidak valid atau melebihi batas!");
+    } while (newNode->maxShiftsPerWeek < 1 || newNode->maxShiftsPerWeek > 7);
+
+    for (int i = 0; i < 3; i++) {
+        do {
+            if (i == 0)
+                printf("Preferensi shift pagi (0 atau 1): ");
+            else if (i == 1)
+                printf("Preferensi shift siang (0 atau 1): ");
+            else
+                printf("Preferensi shift malam (0 atau 1): ");
+
+            fgets(buffer, sizeof(buffer), stdin);
+            if (sscanf(buffer, "%d", &newNode->prefersShift[i]) != 1 || (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1)) {
+                printf("Input tidak valid!\n");
+                newNode->prefersShift[i] = -1; // Meminta ulang
+            }
+        } while (newNode->prefersShift[i] != 0 && newNode->prefersShift[i] != 1);
+    }
+
+    do {
+        printf("Masukkan tanggal cuti (1-30): ");
+        fgets(buffer, sizeof(buffer), stdin);
+        if (sscanf(buffer, "%d", &newNode->restDay) != 1 || newNode->restDay < 1 || newNode->restDay > 30)
+            printf("Tanggal tidak valid!\n");
+    } while (newNode->restDay < 1 || newNode->restDay > 30);
 
     newNode->totalAssignedShifts = 0;
     for (int i = 0; i < 5; i++) newNode->assignedShiftsPerWeek[i] = 0;
 
     newNode->next = NULL;
-    if (!*head_ref){
+    if (!*head_ref) {
         newNode->prev = NULL;
         *head_ref = newNode;
         return;
     }
 
-    struct Doctor_data *tail = *head_ref;
+    DataDokter *tail = *head_ref;
     while (tail->next) tail = tail->next;
     tail->next = newNode;
     newNode->prev = tail;
