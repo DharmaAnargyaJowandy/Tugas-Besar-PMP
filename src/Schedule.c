@@ -1,8 +1,26 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "common.h"
 #include "Schedule.h"
+
+bool get_integer_input(const char* prompt, int* result) {
+    int scanf_result;
+    int c;
+
+    printf("%s", prompt);
+    scanf_result = scanf("%d", result); 
+
+    while ((c = getchar()) != '\n' && c != EOF); 
+
+    if (scanf_result == 1) {
+        return true; 
+    } else {
+        printf("Input tidak valid! Harap masukkan angka saja.\n");
+        return false; 
+    }
+}
 
 void generate_schedule(struct shift_slot *slot, struct Doctor_data *front ){
     int index = 0;
@@ -169,6 +187,80 @@ void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
         }
     }
 
+}
+
+void print_schedule_for_day(struct shift_slot *Slots, struct Doctor_data *front, int day){
+    printf("\nJadwal untuk Tanggal: %d\n", day);
+    for(int i = 0 ; i < 90 ; i++){
+        if (Slots[i].date.date == day) {
+            const char *shiftNames[] = {"Pagi ", "Siang", "Malam"};
+            printf("Shift : %s | Dokter : ", shiftNames[Slots[i].shift]);
+
+            if(Slots[i].assigned_amount == 0){
+                printf("belum dijadwalkan\n");
+            } else {
+                for(int j = 0; j < Slots[i].assigned_amount; j++){
+                    struct Doctor_data *temp = front;
+                    while (temp) {
+                        if(temp->ID == Slots[i].assigned_doctor_ID[j]){
+                            printf("%s", temp->name);
+                            if (j < Slots[i].assigned_amount - 1){
+                                printf(", ");
+                            }
+                            break;
+                        }
+                        temp = temp->next;
+                    }
+                }
+                printf("\n");
+            }
+        }
+    }
+}
+
+void print_schedule_for_week(struct shift_slot *Slots, struct Doctor_data *front, int week){
+    int start_date, end_date;
+    if (week >= 1 && week <= 4) {
+        start_date = (week - 1) * 7 + 1;
+        end_date = week * 7;
+    } else if (week == 5) {
+        start_date = 29;
+        end_date = 30;
+    } else {
+        printf("Minggu tidak valid.\n");
+        return;
+    }
+
+    printf("\nJadwal untuk Minggu ke-%d (Tanggal %d s/d %d)\n", week, start_date, end_date);
+
+    for(int d = start_date; d <= end_date; d++){
+        printf("--- Tanggal: %d ---\n", d);
+        for(int i = 0; i < 90; i++){
+            if (Slots[i].date.date == d) {
+                const char *shiftNames[] = {"Pagi ", "Siang", "Malam"};
+                printf("Shift : %s | Dokter : ", shiftNames[Slots[i].shift]);
+
+                if(Slots[i].assigned_amount == 0){
+                    printf("belum dijadwalkan\n");
+                } else {
+                    for(int j = 0; j < Slots[i].assigned_amount; j++){
+                        struct Doctor_data *temp = front;
+                        while (temp) {
+                            if(temp->ID == Slots[i].assigned_doctor_ID[j]){
+                                printf("%s", temp->name);
+                                if (j < Slots[i].assigned_amount - 1){
+                                    printf(", ");
+                                }
+                                break;
+                            }
+                            temp = temp->next;
+                        }
+                    }
+                    printf("\n");
+                }
+            }
+        }
+    }
 }
 
 void print_unassigned (struct Doctor_data * front){
