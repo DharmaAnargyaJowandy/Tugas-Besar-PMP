@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Doctor.h"
+#include "anomali_preferensi.h"
 #include "common.h"
 #include "Schedule.h"
+
 
 
 
@@ -31,8 +33,11 @@ int main(){
                 hapus_dokter(&head, id);
                 break;
             case 4:
-                generate_schedule(slot);
+                generate_schedule(slot, head);
                 assign_doctor(slot, head);
+                printf("\n--- Mencari dan mengisi shift yang kosong... ---\n");
+                fill_empty_shift(slot, head);
+                printf("\n--- Jadwal Final (30 Hari) ---\n");
                 print_schedule(slot, head);
                 print_unassigned(head);
                 break;
