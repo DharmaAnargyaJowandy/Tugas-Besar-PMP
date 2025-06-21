@@ -41,7 +41,7 @@ int main(){
                 statistik(head);
                 break;
             case 6:
-                simpan_dokter_ke_csv(head);
+                dokter_to_csv(head);
                 jadwal_to_csv(slot, head);
                 printf("Data disimpan. Keluar...\n");
                 break;
