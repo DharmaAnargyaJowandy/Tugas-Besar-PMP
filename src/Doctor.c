@@ -64,30 +64,35 @@ void dokter_to_csv(struct Doctor_data *head){
 
     fclose(file);
 }
+int compare_doctors_by_id(const void *a, const void *b) {
+    struct Doctor_data *docA = *(struct Doctor_data **)a;
+    struct Doctor_data *docB = *(struct Doctor_data **)b;
+    return (docA->ID - docB->ID);
+}
 
 // Fungsi menampilkan seluruh data dokter (diurutkan berdasarkan ID)
 void tampilkan_dokter(struct Doctor_data *head){
-    // Salin ke array pointer
     int count = 0;
     struct Doctor_data *curr = head;
     while (curr) {count++; curr = curr->next;}
+
+    if (count == 0) {
+        printf("Belum ada data dokter.\n");
+        return;
+    }
+
     struct Doctor_data **array = malloc(sizeof(struct Doctor_data*) * count);
+    if (!array) {
+        perror("Gagal alokasi memori untuk sorting");
+        return;
+    }
     curr = head;
     for (int i = 0; i < count; i++){
         array[i] = curr;
         curr = curr->next;
     }
-    // Bubble sort by ID
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = 0; j < count - i - 1; j++){
-            if (array[j]->ID > array[j+1]->ID){
-                struct Doctor_data *temp = array[j];
-                array[j] = array[j+1];
-                array[j+1] = temp;
-            }
-        }
-    }
-    // Cetak hasil
+    qsort(array, count, sizeof(struct Doctor_data*), compare_doctors_by_id);
+    printf("Daftar Dokter (Diurutkan berdasarkan ID):\n");
     for (int i = 0; i < count; i++){
         printf("ID: %03d | Nama: %s | Max Shift/Minggu: %d | Pref: %d-%d-%d | Tanggal Cuti: %d\n",
                array[i]->ID, array[i]->name, array[i]->maxShiftsPerWeek,
@@ -108,6 +113,10 @@ int cek_id_sama(struct Doctor_data *head, int ID){
 // Fungsi menambahkan data dokter
 void tambah_dokter(struct Doctor_data **head_ref) {
     struct Doctor_data *newNode = (struct Doctor_data *)malloc(sizeof(struct Doctor_data));
+    if (!newNode) {
+        perror("Gagal alokasi memori untuk dokter baru");
+        return;
+    }
     char buffer[100];
     int c; 
     int initial_char = getchar();
