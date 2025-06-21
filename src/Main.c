@@ -33,6 +33,7 @@ int main(){
             case 4:
                 generate_schedule(slot);
                 assign_doctor(slot, head);
+                fill_empty_shift(slot, head);
                 print_schedule(slot, head);
                 print_unassigned(head);
                 break;
@@ -41,6 +42,7 @@ int main(){
                 break;
             case 6:
                 simpan_dokter_ke_csv(head);
+                jadwal_to_csv(slot, head);
                 printf("Data disimpan. Keluar...\n");
                 break;
             default:
