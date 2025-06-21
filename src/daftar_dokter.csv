@@ -1,5 +1,4 @@
 Nama,ID,MaxShiftPerWeek,Pagi,Siang,Malam,RestDay
-Andi,001,3,1,0,1,2
 Budi,002,4,1,0,0,20
 Citra,003,6,1,0,1,11
 Dina,004,7,0,1,1,1
@@ -50,4 +49,3 @@ Vito,048,5,0,1,0,13
 Wati,049,7,1,0,1,13
 Raihan,056,3,1,1,1,25
 dharma,100,6,0,1,1,30
-
