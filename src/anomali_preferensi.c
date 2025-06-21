@@ -74,7 +74,7 @@ struct Doctor_data *nonpreferensi_tersedikit(struct shift_slot *slot, struct Doc
             if((traverser->prefersShift[slot[which_shift].shift] == 0)){
                 nonpreference_individu[doc_count]++;
             }
-            if((traverser->assignedShiftsPerWeek[week]) > (traverser->maxShiftsPerWeek)){
+            if((traverser->assignedShiftsPerWeek[week]) >= (traverser->maxShiftsPerWeek)){
                 nonpreference_individu[doc_count]++;
             }
             if(check_assigned_status(traverser ->ID,slot, which_shift)==0){
