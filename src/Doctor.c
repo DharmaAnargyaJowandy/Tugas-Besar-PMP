@@ -66,12 +66,12 @@ void dokter_to_csv(struct Doctor_data *head){
 }
 
 // Fungsi menampilkan seluruh data dokter (diurutkan berdasarkan ID)
-void tampilkan_dokter(DataDokter *head){
+void tampilkan_dokter(struct Doctor_data *head){
     // Salin ke array pointer
     int count = 0;
-    DataDokter *curr = head;
+    struct Doctor_data *curr = head;
     while (curr) {count++; curr = curr->next;}
-    DataDokter **array = malloc(sizeof(DataDokter*) * count);
+    struct Doctor_data **array = malloc(sizeof(struct Doctor_data*) * count);
     curr = head;
     for (int i = 0; i < count; i++){
         array[i] = curr;
@@ -81,7 +81,7 @@ void tampilkan_dokter(DataDokter *head){
     for (int i = 0; i < count - 1; i++) {
         for (int j = 0; j < count - i - 1; j++){
             if (array[j]->ID > array[j+1]->ID){
-                DataDokter *temp = array[j];
+                struct Doctor_data *temp = array[j];
                 array[j] = array[j+1];
                 array[j+1] = temp;
             }
@@ -97,7 +97,7 @@ void tampilkan_dokter(DataDokter *head){
 }
 
 // Fungsi cek duplikat ID
-int cek_id_sama(DataDokter *head, int ID){
+int cek_id_sama(struct Doctor_data *head, int ID){
     while (head){
         if (head->ID == ID) return 1;
         head = head->next;
@@ -106,8 +106,8 @@ int cek_id_sama(DataDokter *head, int ID){
 }
 
 // Fungsi menambahkan data dokter
-void tambah_dokter(DataDokter **head_ref) {
-    DataDokter *newNode = (DataDokter *)malloc(sizeof(DataDokter));
+void tambah_dokter(struct Doctor_data **head_ref) {
+    struct Doctor_data *newNode = (struct Doctor_data *)malloc(sizeof(struct Doctor_data));
     char buffer[100];
     getchar(); // bersihkan newline buffer
 
@@ -171,7 +171,7 @@ void tambah_dokter(DataDokter **head_ref) {
         return;
     }
 
-    DataDokter *tail = *head_ref;
+    struct Doctor_data *tail = *head_ref;
     while (tail->next) tail = tail->next;
     tail->next = newNode;
     newNode->prev = tail;
