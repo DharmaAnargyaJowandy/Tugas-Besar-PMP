@@ -29,6 +29,7 @@ void generate_schedule(struct shift_slot *slot, struct Doctor_data *front ){
             slot[index].shift = j;
             slot[index].assigned_amount = 0;
             slot[index].date.date = i;
+            memset(slot[index].List_pelanggaran,0,sizeof(slot[index].List_pelanggaran));
             for (int k = 0; k < 4; k++) {
                 slot[index].assigned_doctor_ID[k] = 0; 
             }
@@ -189,103 +190,6 @@ void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
 
 }
 
-void print_schedule_for_day(struct shift_slot *Slots, struct Doctor_data *front, int day){
-    printf("\nJadwal untuk Tanggal: %d\n", day);
-    for(int i = 0 ; i < 90 ; i++){
-        if (Slots[i].date.date == day) {
-            const char *shiftNames[] = {"Pagi ", "Siang", "Malam"};
-            printf("Shift : %s | Dokter : ", shiftNames[Slots[i].shift]);
-
-            if(Slots[i].assigned_amount == 0){
-                printf("belum dijadwalkan\n");
-            } else {
-                for(int j = 0; j < Slots[i].assigned_amount; j++){
-                    struct Doctor_data *temp = front;
-                    while (temp) {
-                        if(temp->ID == Slots[i].assigned_doctor_ID[j]){
-                            printf("%s", temp->name);
-                            if (j < Slots[i].assigned_amount - 1){
-                                printf(", ");
-                            }
-                            break;
-                        }
-                        temp = temp->next;
-                    }
-                }
-                printf("\n");
-            }
-        }
-    }
-}
-
-void print_schedule_for_week(struct shift_slot *Slots, struct Doctor_data *front, int week){
-    int start_date, end_date;
-    if (week >= 1 && week <= 4) {
-        start_date = (week - 1) * 7 + 1;
-        end_date = week * 7;
-    } else if (week == 5) {
-        start_date = 29;
-        end_date = 30;
-    } else {
-        printf("Minggu tidak valid.\n");
-        return;
-    }
-
-    printf("\nJadwal untuk Minggu ke-%d (Tanggal %d s/d %d)\n", week, start_date, end_date);
-
-    for(int d = start_date; d <= end_date; d++){
-        printf("--- Tanggal: %d ---\n", d);
-        for(int i = 0; i < 90; i++){
-            if (Slots[i].date.date == d) {
-                const char *shiftNames[] = {"Pagi ", "Siang", "Malam"};
-                printf("Shift : %s | Dokter : ", shiftNames[Slots[i].shift]);
-
-                if(Slots[i].assigned_amount == 0){
-                    printf("belum dijadwalkan\n");
-                } else {
-                    for(int j = 0; j < Slots[i].assigned_amount; j++){
-                        struct Doctor_data *temp = front;
-                        while (temp) {
-                            if(temp->ID == Slots[i].assigned_doctor_ID[j]){
-                                printf("%s", temp->name);
-                                if (j < Slots[i].assigned_amount - 1){
-                                    printf(", ");
-                                }
-                                break;
-                            }
-                            temp = temp->next;
-                        }
-                    }
-                    printf("\n");
-                }
-            }
-        }
-    }
-}
-
-void print_unassigned (struct Doctor_data * front){
-
-    printf("\n");
-    printf("Daftar dokter yang belum mendapat jadwal \n");
-    struct Doctor_data *temp = front;
-    int count = 0;
-
-    while (temp)
-    {
-        if(temp ->totalAssignedShifts == 0){
-            count++;
-            printf("Dr. %s \n", temp->name);
-           
-        }
-
-        temp = temp -> next;
-    }
-
-    if(count == 0){
-        printf("semua dokter telah mendapatkan jadwal \n");
-    }
-}
-
 
 void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
     FILE*point_file=fopen("jadwal_shift.csv", "w");
@@ -324,6 +228,85 @@ void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
         fprintf(point_file,"\n");
     }
     fclose(point_file);
+}
+
+void print_pelanggaran(struct Doctor_data *front, struct shift_slot *slot){
+    printf("list pelanggaran : \n");
+    int count = 1;
+    bool found = false;
+    const char *shiftNames[] = {"Pagi ", "Siang", "Malam"};
+    for(int i = 0; i < 90; i++){
+        for(int j = 0; j < slot[i].assigned_amount; j++){
+            struct Pelanggaran info = slot[i].List_pelanggaran[j];
+
+            if(info.choosen_doctor != NULL){
+                struct Doctor_data *dokter = info.choosen_doctor;
+                found = true;
+                if(info.Pelanggaran_cuti){
+                    printf("%d. Tanggal : %d | Shift : %s | Nama : %s | Jenis Pelanggaran : Hari Libur \n", count,slot[i].date.date,shiftNames[slot[i].shift], dokter->name );
+                    count++;
+                }
+                else if (info.Pelanggaran_max_shift)
+                {
+                    printf("%d. Tanggal : %d | Shift : %s | Nama : %s | Jenis Pelanggaran : Melebihi kuota mingguan \n", count,slot[i].date.date,shiftNames[slot[i].shift], dokter->name );
+                    count++;
+                }
+                else if (info.Pelanggaran_preferensi){
+                    printf("%d. Tanggal : %d | Shift : %s | Nama : %s | Jenis Pelanggaran : Bukan preferensi shift \n", count,slot[i].date.date,shiftNames[slot[i].shift], dokter->name );
+                    count++;
+                }
+            
+            }
+            
+        }
+    }
+    
+    if(found == false){
+        printf("Tidak ada pelanggaran yang tercatat.\n");
+    }
+    printf("\n");
+
+    bool kosong = false;
+    printf("Daftar Slot yang Tidak Terisi : \n");
+    for(int i = 0; i < 90; i++){
+        if(slot[i].assigned_amount == 0){
+            kosong = true;
+            printf("Slot kosong : Tanggal %d, Shift %s\n",
+            slot[i].date.date,
+            shiftNames[slot[i].shift]);
+            
+        }
+    }
+
+    if(kosong == false){
+        printf("Semua slot telah berhasil diisi.\n");
+    }
+    else{
+        printf("Kekurangan dokter. Silahkan Tambah Dokter\n");
+    }
+}
+
+void print_unassigned (struct Doctor_data * front){
+
+    printf("\n");
+    printf("Daftar dokter yang belum mendapat jadwal \n");
+    struct Doctor_data *temp = front;
+    int count = 0;
+
+    while (temp)
+    {
+        if(temp ->totalAssignedShifts == 0){
+            count++;
+            printf("Dr. %s \n", temp->name);
+           
+        }
+
+        temp = temp -> next;
+    }
+
+    if(count == 0){
+        printf("semua dokter telah mendapatkan jadwal \n");
+    }
 }
 
 
