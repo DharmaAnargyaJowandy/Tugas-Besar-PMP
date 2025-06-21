@@ -109,18 +109,28 @@ int cek_id_sama(struct Doctor_data *head, int ID){
 void tambah_dokter(struct Doctor_data **head_ref) {
     struct Doctor_data *newNode = (struct Doctor_data *)malloc(sizeof(struct Doctor_data));
     char buffer[100];
-    getchar(); // bersihkan newline buffer
+    int c; 
+    int initial_char = getchar();
+    if (initial_char != '\n' && initial_char != EOF) {
+        ungetc(initial_char, stdin);
+    } else if (initial_char == EOF) {
+        return;
+    }
 
     printf("Masukkan nama: ");
     fgets(newNode->name, sizeof(newNode->name), stdin);
-    newNode->name[strcspn(newNode->name, "\n")] = '\0'; // hapus newline
-
+    if (strchr(newNode->name, '\n') == NULL) {
+        while ((c = getchar()) != '\n' && c != EOF);
+    } else {
+        newNode->name[strcspn(newNode->name, "\n")] = '\0';
+    }
     int valid = 0;
+    
     do {
         printf("Masukkan ID (3 digit): ");
         fgets(buffer, sizeof(buffer), stdin);
         if (sscanf(buffer, "%d", &newNode->ID) != 1 || newNode->ID < 1 || newNode->ID > 999) {
-            printf("Input tidak valid! Masukkan angka 3 digit (1–999).\n");
+            printf("Input tidak valid! Masukkan angka 3 digit (1-999).\n");
             continue;
         }
         if (cek_id_sama(*head_ref, newNode->ID)) {
