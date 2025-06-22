@@ -1,0 +1,52 @@
+Nama,ID,MaxShiftPerWeek,Pagi,Siang,Malam,RestDay
+dr. Anindya  ,001,6,1,0,1,25
+dr. Bima  ,002,6,1,0,0,20
+dr. Cahyo  ,003,7,1,0,1,11
+dr. Damar  ,004,7,0,1,1,1
+dr. Erlangga  ,005,7,1,1,1,6
+dr. Farhan  ,006,5,0,1,1,20
+dr. Galih  ,007,7,1,0,1,6
+dr. Hanif  ,008,6,1,0,1,29
+dr. Indira  ,009,7,1,0,1,19
+dr. Jaya  ,010,5,0,0,1,29
+dr. Kevin Malik  ,011,6,0,1,0,3
+dr. Lisa Aprilia  ,012,7,0,1,0,23
+dr. Maya Santika  ,013,5,1,0,1,3
+dr. Nadia Putri  ,014,7,1,0,0,17
+dr. Oki Firmansyah  ,015,7,0,0,1,27
+dr. Putra Wijaya  ,016,7,1,1,0,27
+dr. Qory Maulida  ,017,5,0,1,1,5
+dr. Rendra Maulana  ,018,7,0,0,1,22
+dr. Siska Dewi  ,019,7,1,1,1,26
+dr. Tegar Prasetyo  ,020,5,1,1,0,15
+dr. Umi Salamah  ,021,5,0,0,1,6
+dr. Vania Maharani  ,022,5,1,0,0,22
+dr. Wahyu Darmawan  ,023,7,0,1,1,22
+dr. Xenia Prameswari  ,024,5,0,0,1,25
+dr. Yudha Permana  ,025,5,0,1,1,5
+dr. Zaki Ramadhan  ,026,5,1,0,0,10
+dr. Andi Syahputra Hasan  ,027,7,0,1,0,25
+dr. Bella Kartika Dewi  ,028,6,0,1,0,26
+dr. Citra Anggraini Putri  ,029,6,0,1,0,13
+dr. Denny Budi Prakoso  ,030,7,0,1,0,9
+dr. Eko Aditya Prabowo  ,031,7,0,1,1,16
+dr. Fira Nur Aisyah  ,032,7,0,1,1,21
+dr. Gina Rizky Amalia  ,033,7,0,1,0,18
+dr. Haris Setiawan Putra  ,034,6,0,0,1,17
+dr. Irfan Maulana Akbar  ,035,7,1,1,0,30
+dr. Jihan Aulia Rahma  ,036,5,1,0,1,4
+dr. Kiki Rachmat Hidayat  ,037,6,0,0,1,30
+dr. Laila Fadhilah Sari  ,038,5,0,1,1,12
+dr. Miko Prasetya Utama  ,039,6,0,1,1,14
+dr. Novita Dwi Lestari  ,040,5,1,1,1,27
+dr. Oktaviano Reza Mahendra  ,041,5,1,0,0,25
+dr. Pramudya Eka Putra  ,042,5,1,0,1,12
+dr. Qonita Salsabila Nur  ,043,7,1,0,1,27
+dr. Rizka Ayu Ramadhani  ,044,5,1,1,0,23
+dr. Seno Wibowo Putra  ,045,7,1,0,1,14
+dr. Tia Larasati Ningrum  ,046,6,1,0,1,4
+dr. Umar Zakaria Syam  ,047,6,0,0,1,14
+dr. Vito Aditya Nugroho  ,048,5,0,1,0,13
+dr. Wulan Ayuningtyas  ,049,7,1,0,1,13
+dr. Yoga Prabowo  ,000,0,0,0,0,0
+dr. Zulfikar Haris  ,000,0,0,0,0,0
