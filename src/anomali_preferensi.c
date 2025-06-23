@@ -9,11 +9,6 @@
 void fill_empty_shift(struct shift_slot *slot, struct Doctor_data *head){
     int i;
     int doc_count=0;
-    int initial=0;
-    int pelanggaranPerweek[5];
-    for (int j=1; j<5; j++){
-        pelanggaranPerweek[j]=initial;
-    }
     struct Doctor_data *backup_doc=NULL;
 
     for (i=0; i<90; i++){
