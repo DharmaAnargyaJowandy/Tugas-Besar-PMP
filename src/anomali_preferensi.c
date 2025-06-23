@@ -6,6 +6,7 @@
 #include "common.h"
 #include "Schedule.h"
 
+// fungsi untuk mengisi shift yang masih kosong karena pelanggaran preferensi
 void fill_empty_shift(struct shift_slot *slot, struct Doctor_data *head){
     int i;
     int doc_count=0;
@@ -29,6 +30,7 @@ void fill_empty_shift(struct shift_slot *slot, struct Doctor_data *head){
     }
 }
 
+// fungsi menghitung jumlah dokter
 int jumlah_dokter(struct Doctor_data *head){
     int jumlah=0;
     struct Doctor_data *traverser=head;
@@ -39,6 +41,7 @@ int jumlah_dokter(struct Doctor_data *head){
     return jumlah;
 }
 
+// fungsi untuk mencari dokter dengan pelanggaran preferensi tersedikit
 struct Pelanggaran nonpreferensi_tersedikit(struct shift_slot *slot, struct Doctor_data *head, int which_shift, int week){
     struct Pelanggaran hasil;
     struct Doctor_data *fewest_nonprefer_doctor=NULL;

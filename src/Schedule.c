@@ -327,6 +327,7 @@ void kelola_menu_tampil_jadwal(struct shift_slot *slot, struct Doctor_data *head
     } while (pilihan_tampil != 4);
 }
 
+// fungsi menghasilkan list jadwal shift ke dalam jadwal_shift.csv
 void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
     FILE*point_file=fopen("jadwal_shift.csv", "w");
     if (point_file==NULL){
