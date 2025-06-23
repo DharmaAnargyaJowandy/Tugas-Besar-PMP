@@ -5,6 +5,7 @@
 #include "common.h"
 #include "Schedule.h"
 
+// Fungsi untuk mengecek input interger
 bool get_integer_input(const char* prompt, int* result) {
     int scanf_result;
     int c;
@@ -157,6 +158,7 @@ int check_assigned_status(int doctor_ID, struct shift_slot *Slots, int current_i
     return 1;
 }
 
+// Fungsi untuk memprint jadwal per hari
 void print_schedule_for_day(struct shift_slot *Slots, struct Doctor_data *front, int day){
     printf("\nJadwal untuk Tanggal: %d\n", day);
     for(int i = 0 ; i < 90 ; i++){
@@ -186,6 +188,7 @@ void print_schedule_for_day(struct shift_slot *Slots, struct Doctor_data *front,
     }
 }
 
+// Fungsi untuk memprint jadwal per minggu
 void print_schedule_for_week(struct shift_slot *Slots, struct Doctor_data *front, int week){
     int start_date, end_date;
     if (week >= 1 && week <= 4) {
@@ -231,6 +234,7 @@ void print_schedule_for_week(struct shift_slot *Slots, struct Doctor_data *front
     }
 }
 
+// Fungsi untuk memprint jadwal sebulan
 void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
 
     for(int i = 0 ; i <90 ; i++){
@@ -264,6 +268,7 @@ void print_schedule(struct shift_slot *Slots, struct Doctor_data *front ){
 
 }
 
+// Fungsi untuk menu tampilkan jadwal
 void kelola_menu_tampil_jadwal(struct shift_slot *slot, struct Doctor_data *head, int jadwal_dibuat) {
     if (!jadwal_dibuat) {
         printf("Jadwal belum dibuat! Silakan pilih menu 4 terlebih dahulu.\n");
