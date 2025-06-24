@@ -18,7 +18,7 @@ int main(){
 
     do{
         printf("\n=== Menu Dokter ===\n");
-        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat Jadwal\n5. Menampilkan Jadwal\n6. Tampilkan Statistik\n7. Simpan dan keluar\nPilih: ");
+        printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat Jadwal\n5. Menampilkan Jadwal\n6. Tampilkan Statistik\n7. Simpan jadwal dan keluar\nPilih: ");
         scanf("%d", &pilihan);
         printf("\n");
 
