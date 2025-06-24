@@ -222,12 +222,38 @@ void hapus_dokter(struct Doctor_data **head_ref, int targetID){
         return;
     }
 
-    if (curr->prev) curr->prev->next = curr->next;
-    else *head_ref = curr->next;
-    if (curr->next) curr->next->prev = curr->prev;
+    printf("Dokter ditemukan \n");
+    printf("ID   : %d\n", curr->ID);
+    printf("Nama : %s\n", curr -> name);
 
-    free(curr);
-    printf("Dokter dengan ID %d telah dihapus.\n", targetID);
+    char input;
+    printf("konfirmasi Penghapusan\n");
+
+    int valid = 0;
+
+    while (valid == 0)
+    {
+        printf("Apakah anda yakin ingin menghapus dokter? [y/n] : ");
+        scanf(" %c", &input);
+        if(input == 'y' || input =='Y'){
+            if (curr->prev) curr->prev->next = curr->next;
+            else *head_ref = curr->next;
+            if (curr->next) curr->next->prev = curr->prev;
+
+            free(curr);
+            printf("\nDokter dengan ID %d telah dihapus.\n", targetID);
+            valid = 1;
+        }
+        else if (input == 'n' || input =='N')
+        {
+            printf("\nPenghapusan dibatalkan\n");
+            valid = 1;
+        }
+        else{
+            printf("Masukkan input yang sesuai \n");
+        
+        }  
+    }
 }
 
 //fungsi untuk menampilkan statistik berupa rata rata, standard deviasi, max, dan min 
