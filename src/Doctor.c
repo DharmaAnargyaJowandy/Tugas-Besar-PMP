@@ -230,6 +230,7 @@ void hapus_dokter(struct Doctor_data **head_ref, int targetID){
     printf("Dokter dengan ID %d telah dihapus.\n", targetID);
 }
 
+//fungsi untuk menampilkan statistik berupa rata rata, standard deviasi, max, dan min 
 void statistik(struct Doctor_data *front){
 
     int min_sft = max;
@@ -268,8 +269,10 @@ void statistik(struct Doctor_data *front){
 
     double average = sum/count;
 
+    //menghitung variansi
     double variance = (sum_squares/ count) - ( average * average);
 
+    //menghitung standard deviation
     double standard_deviation = sqrt(variance);
 
     printf("Statistik Beban Kerja Dokter\n");

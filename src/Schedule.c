@@ -23,6 +23,7 @@ bool get_integer_input(const char* prompt, int* result) {
     }
 }
 
+//Fungsi untuk menyediakan slot kosong selama 30 hari kedepan
 void generate_schedule(struct shift_slot *slot, struct Doctor_data *front ){
     int index = 0;
     for(int i = 1; i < 31; i++){
@@ -51,6 +52,7 @@ void generate_schedule(struct shift_slot *slot, struct Doctor_data *front ){
     
 }
 
+//fungsi utama untuk menjadwalkan dokter
 void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
 
 
@@ -66,7 +68,7 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
         struct shift_slot *slot = &slots[i];
         int week = (slot -> date.date) / 7;
 
-
+        //iterasi sebannyak 4 kali agar setiap shift dapat diisi dengan maksimum 4 dokter 
         for( int amount = 0; amount < 4; amount++){
             int minshift = max;
             struct Doctor_data *choosen_doctor_ptr = NULL;
@@ -90,6 +92,7 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
                     && check_assigned_status(temp ->ID,slots, i) 
                     && (slot -> date.date != temp ->restDay)
                     &&(!prevent_duplicate(temp->ID, slot))){
+                    // mencari dokter dengan shift mingguan yang masih sedikit
                     if(temp -> assignedShiftsPerWeek[week] < minshift){
                         choosen_doctor_ptr = temp;
                         minshift = temp -> assignedShiftsPerWeek[week];
@@ -123,6 +126,7 @@ void assign_doctor(struct shift_slot *slots, struct Doctor_data *front ){
     }
 }
 
+//fungsi validasi untuk memeriksa apakah seorang dokter telah ditugaskan pada shift yang sama
 int prevent_duplicate(int doctor_ID, struct shift_slot *Slots){
     for(int i = 0; i < Slots ->assigned_amount; i ++){
         if(doctor_ID == Slots ->assigned_doctor_ID[i]){
@@ -132,6 +136,7 @@ int prevent_duplicate(int doctor_ID, struct shift_slot *Slots){
     return 0;
 }
 
+//fungsi validasi untuk memeriksa apakah sorang dokter telah dijadwalkan pada hari tersebut dan mencegah shift yang berdekatan 
 int check_assigned_status(int doctor_ID, struct shift_slot *Slots, int current_index){
     struct shift_slot *temp1 = &Slots[current_index];
     int current_day = temp1 ->date.date;
@@ -372,6 +377,8 @@ void jadwal_to_csv(struct shift_slot *slot, struct Doctor_data *head){
     fclose(point_file);
 }
 
+
+//fungsi untuk menampilkan pelanggaran preferensi yang terjadi 
 void print_pelanggaran(struct Doctor_data *front, struct shift_slot *slot){
     printf("list pelanggaran : \n");
     int count = 1;
@@ -428,6 +435,7 @@ void print_pelanggaran(struct Doctor_data *front, struct shift_slot *slot){
     }
 }
 
+//fungsi untuk menampilkan daftar dokter yang tidak ditugaskan
 void print_unassigned (struct Doctor_data * front){
 
     printf("\n");
