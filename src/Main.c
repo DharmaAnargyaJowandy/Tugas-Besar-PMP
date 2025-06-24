@@ -16,6 +16,9 @@ int main(){
     struct shift_slot slot[90];
     int jadwal_dibuat = 0;
 
+    int decide = 0;
+    bool reschedule = false;
+
     do{
         printf("\n=== Menu Dokter ===\n");
         printf("1. Tampilkan dokter\n2. Tambah dokter\n3. Hapus dokter\n4. Membuat Jadwal\n5. Menampilkan Jadwal\n6. Tampilkan Statistik\n7. Simpan jadwal dan keluar\nPilih: ");
@@ -34,6 +37,9 @@ int main(){
                 printf("Masukkan ID yang ingin dihapus: ");
                 scanf("%d", &id);
                 hapus_dokter(&head, id);
+                if(jadwal_dibuat == 1){
+                    reschedule = true;
+                }
                 break;
             case 4:
                 generate_schedule(slot, head);
@@ -42,14 +48,34 @@ int main(){
                 print_pelanggaran(head, slot);
                 print_unassigned(head);
                 jadwal_dibuat = 1;
+                decide = 1;
+                reschedule = false;
                 break;
             case 5:
+                if(reschedule){
+                        printf("[WARNING] daftar dokter telah berubah sehingga jadwal ini mungkin telah usang\n");
+                        printf("Silahkan pilih opsi 4 untuk membuat ulang jadwal. \n");
+                }
                 kelola_menu_tampil_jadwal(slot, head, jadwal_dibuat);
                 break;
             case 6:
                 statistik(head);
                 break;
             case 7:
+                if(reschedule){
+                    char confirm;
+                    printf("[WARNING] Daftar dokter telah berubah setelah jadwal terakhir dibuat.\n");
+                    printf("Menyimpan sekarang akan menghasilkan file jadwal yang tidak sinkron.\n");
+                    printf("Apakah Anda yakin tetap ingin menyimpan dan keluar? (y/n): ");
+                    scanf(" %c", &confirm); 
+
+                    if (confirm != 'y' && confirm != 'Y') {
+                    printf("Penyimpanan dan proses keluar dibatalkan. Kembali ke menu.\n");
+                    pilihan = 0;
+                    break; 
+                }
+
+                }
                 dokter_to_csv(head);
                 jadwal_to_csv(slot, head);
                 printf("Data disimpan. Keluar...\n");
